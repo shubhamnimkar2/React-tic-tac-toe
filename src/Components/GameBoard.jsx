@@ -1,29 +1,38 @@
-import { useState } from "react";
-const initialBoard = [
-  [null, null, null],
-  [null, null, null],
-  [null, null, null],
-];
+import React from "react";
 
-export default function GameBoard({ currentPlayer, onUserClick }) {
-  const [gameBoard, setGameBoard] = useState(initialBoard);
+/**
+ * GameBoard component renders the tic-tac-toe game board as a grid of buttons.
+ *
+ * @component
+ * @param {Object} props - The component props.
+ * @param {function} props.onSelectSquare - Callback function invoked when a square is selected. Receives the row and column indices as arguments.
+ * @param {Array<Array<string|null>>} props.boards - A 2D array representing the current state of the game board. Each cell contains either 'X', 'O', or null.
+ *
+ * @returns {JSX.Element} The rendered game board as an ordered list of rows and columns.
+ */
+export default function GameBoard({ onSelectSquare, boards }) {
+  //   const [gameBoard, setGameBoard] = useState(initialBoard);
 
-  function handleClick(rowIndex, colIndex) {
-    setGameBoard((prevGameBoard) => {
-      const updatedBoard = [...prevGameBoard].map((row) => [...row]);
-      updatedBoard[rowIndex][colIndex] = currentPlayer;
-      return updatedBoard;
-    });
-    onUserClick();
-  }
+  // function handleClick(rowIndex, colIndex) {
+  //   setGameBoard((prevGameBoard) => {
+  //     const updatedBoard = [...prevGameBoard].map((row) => [...row]);
+  //     updatedBoard[rowIndex][colIndex] = currentPlayer;
+  //     return updatedBoard;
+  //   });
+  //   onUserClick();
+  // }
+
   return (
     <ol id="game-board">
-      {gameBoard.map((row, rowIndex) => (
+      {boards.map((row, rowIndex) => (
         <li key={rowIndex}>
           <ol>
-            {row.map((playerSymbol, idx) => (
-              <li key={idx}>
-                <button onClick={() => handleClick(rowIndex, idx)}>
+            {row.map((playerSymbol, colIndex) => (
+              <li key={colIndex}>
+                <button
+                  disabled={playerSymbol !== null}
+                  onClick={() => onSelectSquare(rowIndex, colIndex)}
+                >
                   {playerSymbol}
                 </button>
               </li>
